@@ -32,7 +32,7 @@ public class Cliente {
     public void cliente(FrameCliente frame){
         servidor = frame.getFieldEndereco().getText();
         nickName = frame.getFieldApelido().getText();
-           
+        System.out.println(servidor);
         try {
             chat = (IChat) Naming.lookup("rmi://" + servidor + "/Chat");
         

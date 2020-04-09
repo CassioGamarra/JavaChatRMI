@@ -4,55 +4,40 @@
  * and open the template in the editor.
  */
 package servidor;
-import cliente.Cliente;
-import java.net.*;
-import java.io.*;
-import java.util.Scanner;
+import audio.TocarSom;
+import chat.Chat;
+import java.net.MalformedURLException;
+import java.rmi.AlreadyBoundException;
+import java.rmi.Naming;
+import java.rmi.RemoteException;
+import java.rmi.registry.LocateRegistry;
+import java.rmi.registry.Registry;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+
 /**
  *
  * @author Cássio e Frederico
  */
 public class Servidor {
-    public Servidor(){}
+    String IP_SERVIDOR = "192.168.0.13";
+    String URL_SERVIDOR = "rmi://"+IP_SERVIDOR+"/Chat";
+    TocarSom somInicio = new TocarSom("/audio/start.wav");
     
-    PrintWriter enviar;
-    Thread thServidor = new Thread();
-    ServerSocket serverSocket;
-    public void servidor(FrameServidor frame) throws IOException{
-        int numeroPorta = Integer.parseInt(frame.getFieldPorta().getText());
-        System.out.println("RODANDO....");
-        serverSocket = new ServerSocket(numeroPorta);
-        Socket clientSocket = serverSocket.accept();
-        enviar = new PrintWriter(clientSocket.getOutputStream(), true);
-        Scanner receber = new Scanner(clientSocket.getInputStream());
-        
-        thServidor = new Thread(){
-            @Override
-            public void run() {
-                String userInput;
-                try{
-                    while(receber.hasNextLine()){
-                        if((userInput = receber.nextLine()) != null){
-                            userInput = userInput +"\n";
-                            frame.getTxtAreaChat().append(userInput);
-                        }
-                    }
-                }catch(Exception ex){
-                    Logger.getLogger(Cliente.class.getName()).log(Level.SEVERE, null, ex);
-                }
-            }
-        };
-        thServidor.start();
-    }
-    public void enviar(String apelido, String msg, FrameServidor frame){
-        String serverInput;
-        if(!msg.contains("Enviar mensagem...")){
-            serverInput = apelido+" diz:"+msg;
-            enviar.println(serverInput);
-            frame.getTxtAreaChat().append(serverInput+"\n");
+    public Servidor(){
+        System.out.println(IP_SERVIDOR);
+        System.out.println(URL_SERVIDOR);
+        try {
+            LocateRegistry.createRegistry(Registry.REGISTRY_PORT);
+            Chat objetoRemoto = new Chat();
+            Naming.bind(URL_SERVIDOR, objetoRemoto);
+            FrameServidor svFrame = new FrameServidor();
+            somInicio.tocarSom();
+            svFrame.setLocationRelativeTo(null);
+            svFrame.setVisible(true);
+        } catch (RemoteException | AlreadyBoundException | MalformedURLException ex) {
+            Logger.getLogger(Servidor.class.getName()).log(Level.SEVERE, null, ex);
         }
+        
     }
-    
 }

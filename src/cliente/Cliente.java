@@ -5,9 +5,14 @@
  */
 package cliente;
 
-import java.io.*;
-import java.net.*;
-import java.util.Scanner;
+import audio.TocarSom;
+import chat.IChat;
+import java.net.MalformedURLException;
+import java.net.UnknownHostException;
+import java.rmi.Naming;
+import java.rmi.NotBoundException;
+import java.rmi.RemoteException;
+import java.util.LinkedList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -18,40 +23,64 @@ import java.util.logging.Logger;
 public class Cliente {
     public Cliente(){}
     
-    PrintWriter enviar;
-    public void cliente(FrameCliente frame) throws IOException{
-        String endereco = frame.getFieldEndereco().getText();
-        int numeroPorta = Integer.parseInt(frame.getFieldPorta().getText());
+    IChat chat;
+    String servidor, nickName, mensagem;
+    LinkedList<String> mensagens = new LinkedList<>();
+    
+    TocarSom somMsgRecebida = new TocarSom("/audio/msn.wav");
+    
+    public void cliente(FrameCliente frame){
+        servidor = frame.getFieldEndereco().getText();
+        nickName = frame.getFieldApelido().getText();
+           
+        try {
+            chat = (IChat) Naming.lookup("rmi://" + servidor + "/Chat");
         
-        Socket servidorSocket = new Socket(endereco, numeroPorta);
-        enviar= new PrintWriter(servidorSocket.getOutputStream(), true);
-        
-        Scanner receber = new Scanner(servidorSocket.getInputStream());
-        
-        new Thread(){
-            public void run(){
-                String serverInput;
-                try {
-                    while(receber.hasNextLine()){
-                        if((serverInput = receber.nextLine()) != null){
-                            serverInput = serverInput +"\n";
-                            frame.getTxtAreaChat().append(serverInput);
+            frame.getTxtAreaChat().append("Conectado...\n\n");
+            mensagens.addAll(chat.lerMensagem());
+            
+            new Thread(){
+                @Override
+                public void run(){
+                    do{
+                        try {
+                            if(chat.lerMensagem().size() > mensagens.size()) {
+                                frame.getTxtAreaChat().setText("");
+                                mensagens.clear();
+                                
+                                for(Object msg : chat.lerMensagem()){
+                                    frame.getTxtAreaChat().append(msg.toString()+"\n");
+                                    mensagens.add(msg.toString());
+                                }
+                                
+                                somMsgRecebida.tocarSom();
+                            }
+                            Thread.sleep(2000);
+                        } 
+                        catch (RemoteException | InterruptedException ex) {
+                            Logger.getLogger(Cliente.class.getName()).log(Level.SEVERE, null, ex);
                         }
-                    }
+                    }while(true);
                 }
-                catch (Exception ex) {
-                    Logger.getLogger(Cliente.class.getName()).log(Level.SEVERE, null, ex); 
-                }
-            }
-        }.start();
-        
+            }.start();
+        }
+        catch (NotBoundException | MalformedURLException | RemoteException ex) {
+            Logger.getLogger(Cliente.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }
+    
     public void enviar(String apelido, String msg, FrameCliente frame){
-        String userInput;
-        if(!msg.contains("Enviar mensagem...")){
-            userInput = apelido+" diz:"+msg;
-            enviar.println(userInput);
-            frame.getTxtAreaChat().append(userInput+"\n");
+        mensagem = apelido+" diz: "+frame.getFieldMsg().getText();
+        if(!mensagem.isEmpty()){
+            try {
+                chat.receberMensagens(mensagem);
+                frame.getFieldMsg().setText("");
+                frame.getTxtAreaChat().append(chat.lerMensagem().getLast() + "\n");
+            }
+            catch (RemoteException ex) {
+                Logger.getLogger(Cliente.class.getName()).log(Level.SEVERE, null, ex);
+            }
+            
         }
     }
 }

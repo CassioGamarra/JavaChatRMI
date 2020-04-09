@@ -6,7 +6,9 @@
 package cliente;
 import java.awt.Color;
 import java.awt.event.KeyEvent;
-import java.io.IOException;
+import java.rmi.RemoteException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.JOptionPane;
 import javax.swing.JTextArea;
 import javax.swing.JTextField;
@@ -18,12 +20,12 @@ public class FrameCliente extends javax.swing.JFrame {
 
     /**
      * Creates new form FrameCliente
+     * @throws java.rmi.RemoteException
      */
-    public FrameCliente() {
+    public FrameCliente() throws RemoteException {
         initComponents();
+        
     }
-    
-    Cliente cliente = new Cliente();
     
     /**
      * This method is called from within the constructor to initialize the form.
@@ -35,15 +37,13 @@ public class FrameCliente extends javax.swing.JFrame {
     private void initComponents() {
 
         panelCliente = new javax.swing.JPanel();
-        fieldPorta = new javax.swing.JTextField();
         fieldEndereco = new javax.swing.JTextField();
-        jScrollPane1 = new javax.swing.JScrollPane();
-        txtAreaChat = new javax.swing.JTextArea();
-        jScrollPane2 = new javax.swing.JScrollPane();
-        txtAreaMsg = new javax.swing.JTextArea();
         btnEnviar = new javax.swing.JButton();
         fieldApelido = new javax.swing.JTextField();
         btnConectar = new javax.swing.JButton();
+        fieldMsg = new javax.swing.JTextField();
+        jScrollPane2 = new javax.swing.JScrollPane();
+        txtAreaChat = new javax.swing.JTextArea();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("CHAT - CLIENTE");
@@ -53,19 +53,6 @@ public class FrameCliente extends javax.swing.JFrame {
         panelCliente.setBorder(javax.swing.BorderFactory.createTitledBorder(new javax.swing.border.LineBorder(new java.awt.Color(0, 0, 0), 1, true), "CHAT - CLIENTE", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Tahoma", 1, 14))); // NOI18N
         panelCliente.setMaximumSize(new java.awt.Dimension(800, 600));
         panelCliente.setMinimumSize(new java.awt.Dimension(800, 600));
-
-        fieldPorta.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
-        fieldPorta.setForeground(Color.gray);
-        fieldPorta.setText("Digite o número da porta...");
-        fieldPorta.setBorder(javax.swing.BorderFactory.createTitledBorder(new javax.swing.border.LineBorder(new java.awt.Color(0, 0, 0), 1, true), "Porta:", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Tahoma", 1, 11))); // NOI18N
-        fieldPorta.addFocusListener(new java.awt.event.FocusAdapter() {
-            public void focusGained(java.awt.event.FocusEvent evt) {
-                fieldPortaFocusGained(evt);
-            }
-            public void focusLost(java.awt.event.FocusEvent evt) {
-                fieldPortaFocusLost(evt);
-            }
-        });
 
         fieldEndereco.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
         fieldEndereco.setForeground(Color.gray);
@@ -79,39 +66,6 @@ public class FrameCliente extends javax.swing.JFrame {
                 fieldEnderecoFocusLost(evt);
             }
         });
-
-        txtAreaChat.setEditable(false);
-        txtAreaChat.setColumns(20);
-        txtAreaChat.setLineWrap(true);
-        txtAreaChat.setRows(5);
-        txtAreaChat.setWrapStyleWord(true);
-        txtAreaChat.setBorder(javax.swing.BorderFactory.createTitledBorder(new javax.swing.border.LineBorder(new java.awt.Color(0, 0, 0), 1, true), "CHAT:", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Tahoma", 1, 12))); // NOI18N
-        jScrollPane1.setViewportView(txtAreaChat);
-
-        txtAreaMsg.setColumns(20);
-        txtAreaMsg.setForeground(Color.gray);
-        txtAreaMsg.setLineWrap(true);
-        txtAreaMsg.setRows(5);
-        txtAreaMsg.setText("Enviar mensagem...");
-        txtAreaMsg.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "MENSAGEM:", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Tahoma", 1, 12))); // NOI18N
-        txtAreaMsg.setCaretPosition(0);
-        txtAreaMsg.setEnabled(false);
-        txtAreaMsg.addFocusListener(new java.awt.event.FocusAdapter() {
-            public void focusGained(java.awt.event.FocusEvent evt) {
-                txtAreaMsgFocusGained(evt);
-            }
-        });
-        txtAreaMsg.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseClicked(java.awt.event.MouseEvent evt) {
-                txtAreaMsgMouseClicked(evt);
-            }
-        });
-        txtAreaMsg.addKeyListener(new java.awt.event.KeyAdapter() {
-            public void keyPressed(java.awt.event.KeyEvent evt) {
-                txtAreaMsgKeyPressed(evt);
-            }
-        });
-        jScrollPane2.setViewportView(txtAreaMsg);
 
         btnEnviar.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
         btnEnviar.setText("ENVIAR");
@@ -142,26 +96,50 @@ public class FrameCliente extends javax.swing.JFrame {
             }
         });
 
+        fieldMsg.setText("Digite sua mensagem...");
+        fieldMsg.setBorder(javax.swing.BorderFactory.createTitledBorder(new javax.swing.border.LineBorder(new java.awt.Color(0, 0, 0), 1, true), "SUA MENSAGEM:"));
+        fieldMsg.setEnabled(false);
+        fieldMsg.addFocusListener(new java.awt.event.FocusAdapter() {
+            public void focusGained(java.awt.event.FocusEvent evt) {
+                fieldMsgFocusGained(evt);
+            }
+        });
+        fieldMsg.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyPressed(java.awt.event.KeyEvent evt) {
+                fieldMsgKeyPressed(evt);
+            }
+        });
+
+        jScrollPane2.setBackground(new java.awt.Color(255, 255, 255));
+        jScrollPane2.setViewportBorder(javax.swing.BorderFactory.createTitledBorder(new javax.swing.border.LineBorder(new java.awt.Color(0, 0, 0), 1, true), "CHAT:"));
+
+        txtAreaChat.setEditable(false);
+        txtAreaChat.setColumns(20);
+        txtAreaChat.setLineWrap(true);
+        txtAreaChat.setRows(5);
+        txtAreaChat.setToolTipText("");
+        txtAreaChat.setWrapStyleWord(true);
+        jScrollPane2.setViewportView(txtAreaChat);
+
         javax.swing.GroupLayout panelClienteLayout = new javax.swing.GroupLayout(panelCliente);
         panelCliente.setLayout(panelClienteLayout);
         panelClienteLayout.setHorizontalGroup(
             panelClienteLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(panelClienteLayout.createSequentialGroup()
                 .addContainerGap()
-                .addGroup(panelClienteLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, panelClienteLayout.createSequentialGroup()
-                        .addComponent(jScrollPane2)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(btnEnviar))
-                    .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 748, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addGroup(panelClienteLayout.createSequentialGroup()
-                        .addComponent(fieldPorta, javax.swing.GroupLayout.PREFERRED_SIZE, 164, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(fieldEndereco, javax.swing.GroupLayout.PREFERRED_SIZE, 164, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(fieldApelido, javax.swing.GroupLayout.PREFERRED_SIZE, 164, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(btnConectar, javax.swing.GroupLayout.PREFERRED_SIZE, 107, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addGroup(panelClienteLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                    .addComponent(jScrollPane2)
+                    .addGroup(panelClienteLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                        .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, panelClienteLayout.createSequentialGroup()
+                            .addComponent(fieldMsg, javax.swing.GroupLayout.PREFERRED_SIZE, 659, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                            .addComponent(btnEnviar))
+                        .addGroup(panelClienteLayout.createSequentialGroup()
+                            .addComponent(fieldEndereco, javax.swing.GroupLayout.PREFERRED_SIZE, 334, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                            .addComponent(fieldApelido, javax.swing.GroupLayout.PREFERRED_SIZE, 164, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                            .addComponent(btnConectar, javax.swing.GroupLayout.PREFERRED_SIZE, 107, javax.swing.GroupLayout.PREFERRED_SIZE))))
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         panelClienteLayout.setVerticalGroup(
@@ -169,17 +147,16 @@ public class FrameCliente extends javax.swing.JFrame {
             .addGroup(panelClienteLayout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(panelClienteLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(btnConectar, javax.swing.GroupLayout.PREFERRED_SIZE, 36, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addGroup(panelClienteLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                        .addComponent(fieldPorta, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addComponent(fieldEndereco, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addComponent(fieldApelido, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addComponent(btnConectar, javax.swing.GroupLayout.PREFERRED_SIZE, 36, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addComponent(fieldApelido, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 343, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 324, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(18, 18, 18)
-                .addGroup(panelClienteLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addComponent(btnEnviar, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(jScrollPane2))
+                .addGroup(panelClienteLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addComponent(fieldMsg, javax.swing.GroupLayout.PREFERRED_SIZE, 56, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(btnEnviar, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
@@ -196,13 +173,14 @@ public class FrameCliente extends javax.swing.JFrame {
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(panelCliente, javax.swing.GroupLayout.PREFERRED_SIZE, 557, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(panelCliente, javax.swing.GroupLayout.PREFERRED_SIZE, 495, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
     
+    Cliente cliente = new Cliente();
     public JTextField getFieldApelido() {
         return fieldApelido;
     }
@@ -211,24 +189,13 @@ public class FrameCliente extends javax.swing.JFrame {
         return fieldEndereco;
     }
 
-    public JTextField getFieldPorta() {
-        return fieldPorta;
-    }
-
     public JTextArea getTxtAreaChat() {
         return txtAreaChat;
     }
 
-    public JTextArea getTxtAreaMsg() {
-        return txtAreaMsg;
+    public JTextField getFieldMsg() {
+        return fieldMsg;
     }
-    private void txtAreaMsgKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtAreaMsgKeyPressed
-        // TODO add your handling code here:
-        if(evt.getKeyCode() == KeyEvent.VK_ENTER){
-            enviar();
-        }
-    }//GEN-LAST:event_txtAreaMsgKeyPressed
-
     private void fieldEnderecoFocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_fieldEnderecoFocusGained
         // TODO add your handling code here:
         fieldEnderecoIn();
@@ -238,16 +205,6 @@ public class FrameCliente extends javax.swing.JFrame {
         // TODO add your handling code here:
         fieldEnderecoOut();
     }//GEN-LAST:event_fieldEnderecoFocusLost
-
-    private void fieldPortaFocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_fieldPortaFocusGained
-        // TODO add your handling code here:
-        fieldPortaIn();
-    }//GEN-LAST:event_fieldPortaFocusGained
-
-    private void fieldPortaFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_fieldPortaFocusLost
-        // TODO add your handling code here:
-        fieldPortaOut();
-    }//GEN-LAST:event_fieldPortaFocusLost
 
     private void fieldApelidoFocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_fieldApelidoFocusGained
         // TODO add your handling code here:
@@ -259,11 +216,6 @@ public class FrameCliente extends javax.swing.JFrame {
         fieldApelidoOut();
     }//GEN-LAST:event_fieldApelidoFocusLost
 
-    private void txtAreaMsgFocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_txtAreaMsgFocusGained
-        // TODO add your handling code here:
-        txtAreaMsgIn();
-    }//GEN-LAST:event_txtAreaMsgFocusGained
-
     private void btnEnviarMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnEnviarMouseClicked
         // TODO add your handling code here:
         enviar();
@@ -271,26 +223,24 @@ public class FrameCliente extends javax.swing.JFrame {
 
     private void btnConectarMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnConectarMouseClicked
         // TODO add your handling code here:
-        if(btnConectar.getText().equals("DESCONECTAR")){
-            desconectar();
-        }
-        else{
-            conectar();
-        }
+        conectar();
     }//GEN-LAST:event_btnConectarMouseClicked
 
-    private void txtAreaMsgMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_txtAreaMsgMouseClicked
+    private void fieldMsgFocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_fieldMsgFocusGained
         // TODO add your handling code here:
-        System.out.println(txtAreaMsg.getCaretPosition());
-    }//GEN-LAST:event_txtAreaMsgMouseClicked
+        fieldMsgIn();
+    }//GEN-LAST:event_fieldMsgFocusGained
+
+    private void fieldMsgKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_fieldMsgKeyPressed
+        // TODO add your handling code here:
+        if(evt.getKeyCode() == KeyEvent.VK_ENTER){
+            enviar();
+        }
+    }//GEN-LAST:event_fieldMsgKeyPressed
     
     //Métodos referente aos eventos
     private void conectar(){
-        if(fieldPorta.getText().equals("Digite o número da porta...")){
-            JOptionPane.showMessageDialog(null, "Digite o número da porta...");
-        
-        }
-        else if(fieldEndereco.getText().equals("Digite o endereço...")){
+        if(fieldEndereco.getText().equals("Digite o endereço...")){
             JOptionPane.showMessageDialog(null, "Digite o endereço...");
         }
         else if(fieldApelido.getText().equals("Digite seu apelido...")){
@@ -298,41 +248,22 @@ public class FrameCliente extends javax.swing.JFrame {
         }
         
         else{
-            try {
-                cliente.cliente(this);
-                txtAreaMsg.setEnabled(true);
-                btnEnviar.setEnabled(true);
-                fieldPorta.setEnabled(false);
-                fieldEndereco.setEnabled(false);
-                fieldApelido.setEnabled(false);
-                btnConectar.setText("DESCONECTAR");
-            } catch (IOException ex) {
-                JOptionPane.showMessageDialog(null, "Não foi possível conectar!");
-            }
+            cliente.cliente(this);
+            fieldMsg.setEnabled(true);
+            btnEnviar.setEnabled(true);
+            fieldEndereco.setEnabled(false);
+            fieldApelido.setEnabled(false);
+            btnConectar.setEnabled(false);
         }
     }
     private void desconectar(){
-        fieldPorta.setEnabled(true);
         fieldEndereco.setEnabled(true);
         fieldApelido.setEnabled(true);
         btnConectar.setText("CONECTAR");
     }
     private void enviar(){
-        if(!txtAreaMsg.getText().contains("\n")){
-            cliente.enviar(fieldApelido.getText(), txtAreaMsg.getText(), this);
-            txtAreaMsg.getDocument().putProperty("filterNewlines", Boolean.TRUE);
-            txtAreaMsg.setText("");
-        }
-    }
-    private void fieldPortaIn(){
-        fieldPorta.setForeground(Color.black);
-        fieldPorta.setText("");
-    }
-    private void fieldPortaOut(){
-        if(fieldPorta.getText().equals("")){
-            fieldPorta.setForeground(Color.gray);
-            fieldPorta.setText("Digite o número da porta...");
-        }
+        cliente.enviar(fieldApelido.getText(), fieldMsg.getText(), this);
+        fieldMsg.setText("");
     }
     private void fieldEnderecoIn(){
         fieldEndereco.setText("");
@@ -354,9 +285,9 @@ public class FrameCliente extends javax.swing.JFrame {
             fieldApelido.setText("Digite seu apelido...");
         }
     }
-    private void txtAreaMsgIn(){
-        txtAreaMsg.setForeground(Color.black);
-        txtAreaMsg.setText("");
+    private void fieldMsgIn(){
+        fieldMsg.setForeground(Color.black);
+        fieldMsg.setText("");
     }
 
     
@@ -387,13 +318,25 @@ public class FrameCliente extends javax.swing.JFrame {
         }
         //</editor-fold>
         //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
 
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                FrameCliente frmCliente = new FrameCliente();
-                frmCliente.setLocationRelativeTo(null);
-                frmCliente.setVisible(true);
+                FrameCliente frmCliente;
+                try {
+                    frmCliente = new FrameCliente();
+                    frmCliente.setLocationRelativeTo(null);
+                    frmCliente.setVisible(true);
+                } catch (RemoteException ex) {
+                    Logger.getLogger(FrameCliente.class.getName()).log(Level.SEVERE, null, ex);
+                }
+                
             }
         });
     }
@@ -403,11 +346,9 @@ public class FrameCliente extends javax.swing.JFrame {
     private javax.swing.JButton btnEnviar;
     private javax.swing.JTextField fieldApelido;
     private javax.swing.JTextField fieldEndereco;
-    private javax.swing.JTextField fieldPorta;
-    private javax.swing.JScrollPane jScrollPane1;
+    private javax.swing.JTextField fieldMsg;
     private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JPanel panelCliente;
     private javax.swing.JTextArea txtAreaChat;
-    private javax.swing.JTextArea txtAreaMsg;
     // End of variables declaration//GEN-END:variables
 }

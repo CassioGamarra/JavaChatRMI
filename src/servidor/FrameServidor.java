@@ -4,19 +4,9 @@
  * and open the template in the editor.
  */
 package servidor;
-
-import java.awt.Color;
-import java.awt.event.KeyEvent;
-import java.io.IOException;
-import java.util.logging.Level;
-import java.util.logging.Logger;
-import javax.swing.JOptionPane;
-import javax.swing.JTextArea;
-import javax.swing.JTextField;
-
 /**
  *
- * @author Cássio e Frederico
+ * @author jhonatan
  */
 public class FrameServidor extends javax.swing.JFrame {
 
@@ -25,9 +15,9 @@ public class FrameServidor extends javax.swing.JFrame {
      */
     public FrameServidor() {
         initComponents();
+        
     }
     
-    Servidor server = new Servidor();
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -38,265 +28,45 @@ public class FrameServidor extends javax.swing.JFrame {
     private void initComponents() {
 
         panelServidor = new javax.swing.JPanel();
-        fieldPorta = new javax.swing.JTextField();
-        fieldApelido = new javax.swing.JTextField();
-        jScrollPane1 = new javax.swing.JScrollPane();
-        txtAreaChat = new javax.swing.JTextArea();
-        jScrollPane2 = new javax.swing.JScrollPane();
-        txtAreaMsg = new javax.swing.JTextArea();
-        btnEnviar = new javax.swing.JButton();
-        executaServidor = new javax.swing.JButton();
+        jLabel2 = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
-        setTitle("CHAT - SERVIDOR");
+        setTitle("SERVIDOR - CHAT RMI - CÁSSIO E FREDERICO");
         setBackground(new java.awt.Color(255, 255, 255));
-        setMaximumSize(new java.awt.Dimension(800, 600));
-        setMinimumSize(new java.awt.Dimension(800, 600));
+        setMaximumSize(new java.awt.Dimension(300, 240));
+        setMinimumSize(new java.awt.Dimension(300, 240));
+        setPreferredSize(new java.awt.Dimension(300, 240));
         setResizable(false);
 
         panelServidor.setBackground(new java.awt.Color(255, 255, 255));
-        panelServidor.setBorder(javax.swing.BorderFactory.createTitledBorder(new javax.swing.border.LineBorder(new java.awt.Color(0, 0, 0), 1, true), "CHAT - SERVIDOR", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Tahoma", 1, 14))); // NOI18N
-        panelServidor.setMaximumSize(new java.awt.Dimension(800, 600));
-        panelServidor.setMinimumSize(new java.awt.Dimension(800, 600));
 
-        fieldPorta.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
-        fieldPorta.setForeground(Color.gray);
-        fieldPorta.setText("Digite o número da porta...");
-        fieldPorta.setBorder(javax.swing.BorderFactory.createTitledBorder(new javax.swing.border.LineBorder(new java.awt.Color(0, 0, 0), 1, true), "Porta:", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Tahoma", 1, 11))); // NOI18N
-        fieldPorta.addFocusListener(new java.awt.event.FocusAdapter() {
-            public void focusGained(java.awt.event.FocusEvent evt) {
-                fieldPortaFocusGained(evt);
-            }
-            public void focusLost(java.awt.event.FocusEvent evt) {
-                fieldPortaFocusLost(evt);
-            }
-        });
-
-        fieldApelido.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
-        fieldApelido.setForeground(Color.gray);
-        fieldApelido.setText("Digite seu apelido...");
-        fieldApelido.setBorder(javax.swing.BorderFactory.createTitledBorder(new javax.swing.border.LineBorder(new java.awt.Color(0, 0, 0), 1, true), "Apelido:", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Tahoma", 1, 11))); // NOI18N
-        fieldApelido.addFocusListener(new java.awt.event.FocusAdapter() {
-            public void focusGained(java.awt.event.FocusEvent evt) {
-                fieldApelidoFocusGained(evt);
-            }
-            public void focusLost(java.awt.event.FocusEvent evt) {
-                fieldApelidoFocusLost(evt);
-            }
-        });
-
-        txtAreaChat.setEditable(false);
-        txtAreaChat.setColumns(20);
-        txtAreaChat.setLineWrap(true);
-        txtAreaChat.setRows(5);
-        txtAreaChat.setWrapStyleWord(true);
-        txtAreaChat.setBorder(javax.swing.BorderFactory.createTitledBorder(new javax.swing.border.LineBorder(new java.awt.Color(0, 0, 0), 1, true), "CHAT:", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Tahoma", 1, 12))); // NOI18N
-        jScrollPane1.setViewportView(txtAreaChat);
-
-        txtAreaMsg.setColumns(20);
-        txtAreaMsg.setForeground(Color.gray);
-        txtAreaMsg.setLineWrap(true);
-        txtAreaMsg.setRows(5);
-        txtAreaMsg.setText("Enviar mensagem...");
-        txtAreaMsg.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "MENSAGEM:", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Tahoma", 1, 12))); // NOI18N
-        txtAreaMsg.setCaretPosition(0);
-        txtAreaMsg.setEnabled(false);
-        txtAreaMsg.addFocusListener(new java.awt.event.FocusAdapter() {
-            public void focusGained(java.awt.event.FocusEvent evt) {
-                txtAreaMsgFocusGained(evt);
-            }
-        });
-        txtAreaMsg.addKeyListener(new java.awt.event.KeyAdapter() {
-            public void keyPressed(java.awt.event.KeyEvent evt) {
-                txtAreaMsgKeyPressed(evt);
-            }
-        });
-        jScrollPane2.setViewportView(txtAreaMsg);
-
-        btnEnviar.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
-        btnEnviar.setText("ENVIAR");
-        btnEnviar.setEnabled(false);
-        btnEnviar.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseClicked(java.awt.event.MouseEvent evt) {
-                btnEnviarMouseClicked(evt);
-            }
-        });
-
-        executaServidor.setText("EXECUTAR SERVIDOR");
-        executaServidor.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseClicked(java.awt.event.MouseEvent evt) {
-                executaServidorMouseClicked(evt);
-            }
-        });
+        jLabel2.setBackground(new java.awt.Color(255, 255, 255));
+        jLabel2.setIcon(new javax.swing.ImageIcon(getClass().getResource("/img/servidoronline.png"))); // NOI18N
 
         javax.swing.GroupLayout panelServidorLayout = new javax.swing.GroupLayout(panelServidor);
         panelServidor.setLayout(panelServidorLayout);
         panelServidorLayout.setHorizontalGroup(
             panelServidorLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(panelServidorLayout.createSequentialGroup()
-                .addContainerGap()
-                .addGroup(panelServidorLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, panelServidorLayout.createSequentialGroup()
-                        .addComponent(jScrollPane2)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(btnEnviar))
-                    .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 748, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addGroup(panelServidorLayout.createSequentialGroup()
-                        .addComponent(fieldPorta, javax.swing.GroupLayout.PREFERRED_SIZE, 164, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(fieldApelido, javax.swing.GroupLayout.PREFERRED_SIZE, 164, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(executaServidor)))
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+            .addComponent(jLabel2)
         );
         panelServidorLayout.setVerticalGroup(
             panelServidorLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(panelServidorLayout.createSequentialGroup()
-                .addContainerGap()
-                .addGroup(panelServidorLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(fieldPorta, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(fieldApelido, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(executaServidor, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 324, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(18, 18, 18)
-                .addGroup(panelServidorLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addComponent(btnEnviar, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(jScrollPane2))
-                .addGap(63, 63, 63))
+            .addComponent(jLabel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
         );
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(panelServidor, javax.swing.GroupLayout.PREFERRED_SIZE, 780, Short.MAX_VALUE)
-                .addContainerGap())
+            .addComponent(panelServidor, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(panelServidor, javax.swing.GroupLayout.PREFERRED_SIZE, 557, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(32, Short.MAX_VALUE))
+            .addComponent(panelServidor, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
         );
 
         pack();
-        setLocationRelativeTo(null);
     }// </editor-fold>//GEN-END:initComponents
-
-    public JTextField getFieldApelido() {
-        return fieldApelido;
-    }
-    
-    public JTextField getFieldPorta() {
-        return fieldPorta;
-    }
-
-    public JTextArea getTxtAreaChat() {
-        return txtAreaChat;
-    }
-
-    public JTextArea getTxtAreaMsg() {
-        return txtAreaMsg;
-    }
-    
-    //Métodos
-    
-    private void enviar(){
-        if(!txtAreaMsg.getText().contains("\n")){
-            server.enviar(fieldApelido.getText(), txtAreaMsg.getText(), this);
-            txtAreaMsg.getDocument().putProperty("filterNewlines", Boolean.TRUE);
-            txtAreaMsg.setText("");
-        }
-    }
-    
-    private void txtAreaMsgIn(){
-        txtAreaMsg.setForeground(Color.black);
-        txtAreaMsg.setText("");
-    }
-    
-    private void fieldApelidoIn(){
-        fieldApelido.setForeground(Color.black);
-        fieldApelido.setText("");
-    }
-    
-    private void fieldApelidoOut(){
-        if(fieldApelido.getText().equals("")){
-            fieldApelido.setForeground(Color.gray);
-            fieldApelido.setText("Digite seu apelido...");
-        }
-    }
-    
-    private void fieldPortaIn(){
-        fieldPorta.setForeground(Color.black);
-        fieldPorta.setText("");
-    }
-    
-    private void fieldPortaOut(){
-        if(fieldPorta.getText().equals("")){
-            fieldPorta.setForeground(Color.gray);
-            fieldPorta.setText("Digite o número da porta...");
-        }
-    }
-    
-    private void executarServidor(){
-        if(fieldPorta.getText().equals("Digite o número da porta...")){
-            JOptionPane.showMessageDialog(null, "Digite o número da porta...");
-        }
-        if(fieldApelido.getText().equals("Digite seu apelido...")){
-            JOptionPane.showMessageDialog(null, "Digite seu apelido...");
-        }
-        else{
-            try {
-                server.servidor(this);
-                btnEnviar.setEnabled(true);
-                txtAreaMsg.setEnabled(true);
-                fieldApelido.setEnabled(false);
-                fieldPorta.setEnabled(false);
-            } catch (IOException ex) {
-                Logger.getLogger(FrameServidor.class.getName()).log(Level.SEVERE, null, ex);
-            }
-        }
-    }
-    
-    
-    private void txtAreaMsgFocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_txtAreaMsgFocusGained
-        txtAreaMsgIn();
-    }//GEN-LAST:event_txtAreaMsgFocusGained
-
-    private void executaServidorMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_executaServidorMouseClicked
-        executarServidor();
-    }//GEN-LAST:event_executaServidorMouseClicked
-
-    private void fieldPortaFocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_fieldPortaFocusGained
-        fieldPortaIn();
-    }//GEN-LAST:event_fieldPortaFocusGained
-
-    private void fieldPortaFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_fieldPortaFocusLost
-       fieldPortaOut();
-    }//GEN-LAST:event_fieldPortaFocusLost
-
-    private void fieldApelidoFocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_fieldApelidoFocusGained
-        fieldApelidoIn();
-    }//GEN-LAST:event_fieldApelidoFocusGained
-
-    private void fieldApelidoFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_fieldApelidoFocusLost
-        fieldApelidoOut();
-    }//GEN-LAST:event_fieldApelidoFocusLost
-
-    private void btnEnviarMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnEnviarMouseClicked
-        enviar();
-    }//GEN-LAST:event_btnEnviarMouseClicked
-
-    private void txtAreaMsgKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtAreaMsgKeyPressed
-        // TODO add your handling code here:
-        if(evt.getKeyCode() == KeyEvent.VK_ENTER){
-            enviar();
-        }
-    }//GEN-LAST:event_txtAreaMsgKeyPressed
 
     /**
      * @param args the command line arguments
@@ -309,7 +79,7 @@ public class FrameServidor extends javax.swing.JFrame {
          */
         try {
             for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
-                if ("Windows".equals(info.getName())) {
+                if ("Nimbus".equals(info.getName())) {
                     javax.swing.UIManager.setLookAndFeel(info.getClassName());
                     break;
                 }
@@ -324,25 +94,18 @@ public class FrameServidor extends javax.swing.JFrame {
             java.util.logging.Logger.getLogger(FrameServidor.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         }
         //</editor-fold>
-        //</editor-fold>
 
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
                 new FrameServidor().setVisible(true);
+                
             }
         });
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JButton btnEnviar;
-    private javax.swing.JButton executaServidor;
-    private javax.swing.JTextField fieldApelido;
-    private javax.swing.JTextField fieldPorta;
-    private javax.swing.JScrollPane jScrollPane1;
-    private javax.swing.JScrollPane jScrollPane2;
+    private javax.swing.JLabel jLabel2;
     private javax.swing.JPanel panelServidor;
-    private javax.swing.JTextArea txtAreaChat;
-    private javax.swing.JTextArea txtAreaMsg;
     // End of variables declaration//GEN-END:variables
 }

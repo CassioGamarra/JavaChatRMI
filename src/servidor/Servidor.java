@@ -20,7 +20,7 @@ import java.util.logging.Logger;
  * @author Cássio e Frederico
  */
 public class Servidor {
-    String IP_SERVIDOR = "192.168.0.13";
+    String IP_SERVIDOR = "localhost";
     String URL_SERVIDOR = "rmi://"+IP_SERVIDOR+"/Chat";
     TocarSom somInicio = new TocarSom("/audio/start.wav");
     

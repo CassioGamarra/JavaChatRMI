@@ -25,8 +25,6 @@ public class Servidor {
     TocarSom somInicio = new TocarSom("/audio/start.wav");
     
     public Servidor(){
-        System.out.println(IP_SERVIDOR);
-        System.out.println(URL_SERVIDOR);
         try {
             LocateRegistry.createRegistry(Registry.REGISTRY_PORT);
             Chat objetoRemoto = new Chat();
